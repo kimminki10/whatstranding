@@ -26,10 +26,8 @@ def fetch_google_trends():
         except ValueError:
             search_volume = 0
 
-        # Save to Trend model if started_at is valid
-        if started_at:
-            Trend.objects.create(
-                keyword=title,
-                search_volume=search_volume,
-                started_at=started_at
-            )
+        Trend.objects.create(
+            keyword=title,
+            search_volume=search_volume,
+            started_at=started_at,
+        )

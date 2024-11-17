@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import UserList
+from .views import UserListCreate, EmailVerification
 
 urlpatterns = [
-    path('', UserList.as_view(), name='user-list'),
+    path('', UserListCreate.as_view(), name='user-list-create'),
+    path('verify-email/<str:token>/', EmailVerification.as_view(), name='verify-email'),
 ]
