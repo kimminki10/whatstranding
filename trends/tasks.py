@@ -21,11 +21,6 @@ def fetch_google_trends():
         except ValueError:
             search_volume = 0
 
-        try:
-            search_volume = int(search_volume)
-        except ValueError:
-            search_volume = 0
-
         Trend.objects.create(
             keyword=title,
             search_volume=search_volume,

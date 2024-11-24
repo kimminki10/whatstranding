@@ -1,0 +1,60 @@
+services:
+  db:
+    image: mysql:8.3
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: trendboard
+      MYSQL_USER: trendboard
+      MYSQL_PASSWORD: trendboard
+    command: 
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  trendboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DJANGO_SETTINGS_MODULE=trendboard.settings.docker
+    command: poetry run python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DJANGO_SETTINGS_MODULE=trendboard.settings.docker
+    restart: always
+    command: poetry run celery -A trendboard worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+
+  flower:
+    image: mher/flower
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - FLOWER_PORT=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - celery_worker
