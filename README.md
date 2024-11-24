@@ -6,3 +6,8 @@
 
 # 실행방법
 
+1. .env.copy 파일을 .env 파일로 수정하고 내용을 채워줍니다.
+1. 아래 명령을 입력합니다.
+```
+docker compose up -d --build
+```

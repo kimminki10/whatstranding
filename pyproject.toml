@@ -19,6 +19,11 @@ flower = "^2.0.1"
 python-decouple = "^3.8"
 django-redis = "^5.4.0"
 mysqlclient = "^2.2.6"
+bs4 = "^0.0.2"
+langchain-community = "^0.3.8"
+langchain = "^0.3.8"
+langchain-openai = "^0.2.9"
+langchainhub = "^0.1.21"
 
 
 [build-system]
